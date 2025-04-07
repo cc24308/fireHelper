@@ -1,0 +1,12 @@
+____________
+TODO
+
+-   Modularizar a api para deixar o acesso dela de qualquer arquivo sem precisar que sempre faça todas as importações.
+    Então, devo deixar um arquivo específico apenas para os comandos e as bibloteca e exporta-lo.
+
+____________
+RODAR A API
+
+Antes de rodar a API, deve-se adicionar o arquivo json de chave privada (Drive do TCC na pasta "código fonte") que está nomeada "mk39.json".
+Para rodar a API, deve-se digitar "fastapi dev fireHelper.py".
+____________
