@@ -9,7 +9,7 @@ import json
 #cred = credentials.Certificate(os.environ["CREDENTIAL_CERTIFICATE"])
 
 cred_dic = {
-    "type": os.environ["TYPE"],
+  "type": os.environ["TYPE"],
   "project_id": os.environ["PROJECT_ID"],
   "private_key_id": os.environ["PRIVATE_KEY_ID"],
   "private_key": os.environ["PRIVATE_KEY"].replace("\\n", "\n"), #pode dar erro por causa das quebras de linha
