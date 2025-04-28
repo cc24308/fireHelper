@@ -12,7 +12,7 @@ cred_dic = {
     "type": os.environ["TYPE"],
   "project_id": os.environ["PROJECT_ID"],
   "private_key_id": os.environ["PRIVATE_KEY_ID"],
-  "private_key": os.environ["PRIVATE_KEY"], #pode dar erro por causa das quebras de linha
+  "private_key": os.environ["PRIVATE_KEY"].replace("\\n", "\n"), #pode dar erro por causa das quebras de linha
   "client_email": os.environ["CLIENT_EMAIL"],
   "client_id": os.environ["CLIENT_ID"],
   "auth_uri": os.environ["AUTH_URI"],
@@ -94,38 +94,6 @@ async def create_user(user: dict):
 
 @app.delete("/users")
 async def delete_user(user: dict):
-
-    try:
-        name = user.get("name")
-        if not name:
-            return {"success": False, "message": "Name is required in the request body"}
-
-        retorno = admin_db.collection("users").where("name", "==", name).stream()
-
-        deleted_any = False
-        for doc in retorno:
-            admin_db.collection("users").document(doc.id).delete()
-            deleted_any = True
-
-        if deleted_any:
-            return {
-                "success": True,
-                "message": f"User(s) with name '{name}' deleted"
-            }
-        else:
-            return {
-                "success": False,
-                "message": f"No user with name '{name}' found"
-            }
-
-    except Exception as e:
-        return {
-            "success": False,
-            "message": f"User could not be safely deleted: {str(e)}"
-        }
-
-@app.delete("/users")
-async def safe_delete_user(user: dict):
 
     try:
         name = user.get("name")
