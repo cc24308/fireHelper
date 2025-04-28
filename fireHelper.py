@@ -2,7 +2,7 @@ from fastapi import FastAPI, Header, Path, HTTPException
 import firebase_admin
 from firebase_admin import credentials, firestore as admin_firestore, auth 
 import os
-from dataTypes import Task
+from dataTypes.Task import Task
 
 cred = credentials.Certificate(os.environ["CREDENTIAL_CERTIFICATE"])
 firebase_admin.initialize_app(cred)
