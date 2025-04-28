@@ -10,7 +10,7 @@ import os
 
 #cred = credentials.Certificate(os.environ["CREDENTIAL_CERTIFICATE"])
 
-
+#asd
 cred_dic = {
   "type": os.getenv["TYPE"],
   "project_id": os.getenv["PROJECT_ID"],
