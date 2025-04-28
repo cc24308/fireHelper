@@ -3,6 +3,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore as admin_firestore, auth 
 import os
 from dataTypes.Task import Task
+#pip freeze > requirements.txt = pra fazer o txt que o render vai baixar pra fazer a api rodar
 
 cred = credentials.Certificate(os.environ["CREDENTIAL_CERTIFICATE"])
 firebase_admin.initialize_app(cred)
