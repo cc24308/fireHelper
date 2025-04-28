@@ -3,11 +3,12 @@ import firebase_admin
 from firebase_admin import credentials, firestore as admin_firestore, auth 
 import os
 from dataTypes.Task import Task
+import json
 #pip freeze > requirements.txt = pra fazer o txt que o render vai baixar pra fazer a api rodar
 
 #cred = credentials.Certificate(os.environ["CREDENTIAL_CERTIFICATE"])
 
-cred = {
+cred_dic = {
     "type": os.environ["TYPE"],
   "project_id": os.environ["PROJECT_ID"],
   "private_key_id": os.environ["PRIVATE_KEY_ID"],
@@ -21,6 +22,7 @@ cred = {
   "universe_domain": os.environ["UNIVERSE_DOMAIN"],
 }
 
+cred = credentials.Certificate(cred_dic)
 firebase_admin.initialize_app(cred)
 
 admin_db = admin_firestore.client()
