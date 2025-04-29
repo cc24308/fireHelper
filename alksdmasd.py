@@ -1,9 +1,12 @@
 import os
+from dotenv import load_dotenv
+import json
 
+load_dotenv() 
+
+private_key = os.getenv("PRIVATE_KEY").strip('"').replace("\\n", "\n")
 # Lê a variável de ambiente
-private_key = os.environ["PRIVATE_KEY"]
 
 # Substitui as quebras de linha reais por 'quebralinha'
-private_key = private_key.replace("\\n", "\n")
 
-print("Com 'quebralinha':", private_key)
+print(private_key)
