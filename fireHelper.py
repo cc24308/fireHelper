@@ -65,7 +65,7 @@ async def create_user(user: dict):
             }
 
         # cria o usuário no firestore com o add
-        user_ref = admin_db.collection("users").add(user)
+        user_ref, uselles = admin_db.collection("users").add(user)
 
         # pega o ID do documento criado
         user_id = user_ref.id
