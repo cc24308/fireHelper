@@ -78,14 +78,14 @@ async def create_user(user: dict):
 
         return {
             "success": True,
-            "message": "Usuário criado com sucesso!"
+            "message": "User created successfully!"
         }
 
     except Exception as e:
         print("caiu aqui")
         return {
             "success": False,
-            "message": f"Erro ao criar usuário: {str(e)}"
+            "message": f"Error trying to create user: {str(e)}"
         }
     
 
