@@ -4,31 +4,21 @@ from firebase_admin import credentials, firestore as admin_firestore, auth
 import os
 from dataTypes.Task import Task
 from dotenv import load_dotenv
-import os
-import json
-
+import os, json, base64
 load_dotenv() 
 
+#firebase_admin.initialize_app(cred)
+
+
 #pip freeze > requirements.txt = pra fazer o txt que o render vai baixar pra fazer a api rodar
+#base64 -w0 C:/Users/u24308/Documents/GitHub/fireHelper/mk39.json > credential.b64
 
-#cred = credentials.Certificate(os.environ["CREDENTIAL_CERTIFICATE"])
+b64 = os.environ["CREDENTIAL_CERTIFICATE_B64"]
+b64 += "=" * ((4 - len(b64) % 4) % 4)
+json_str = base64.b64decode(b64).decode("utf-8")
+cred_dict = json.loads(json_str)
+cred = credentials.Certificate(cred_dict)
 
-#asd
-cred_dic = {
-  "type": os.environ["TYPE"],
-  "project_id": os.environ["PROJECT_ID"],
-  "private_key_id": os.environ["PRIVATE_KEY_ID"],
-  "private_key":os.getenv("PRIVATE_KEY").replace("\\n", "\n"), #pode dar erro por causa das quebras de linha
-  "client_email": os.environ["CLIENT_EMAIL"],
-  "client_id": os.environ["CLIENT_ID"],
-  "auth_uri": os.environ["AUTH_URI"],
-  "token_uri": os.environ["TOKEN_URI"],
-  "auth_provider_x509_cert_url": os.environ["AUTH_PROVIDER_X509_CERT_URL"],
-  "client_x509_cert_url": os.environ["CLIENT_X509_CERT_URL"],
-  "universe_domain": os.environ["UNIVERSE_DOMAIN"]
-}
-
-cred = credentials.Certificate(cred_dic)
 firebase_admin.initialize_app(cred)
 
 admin_db = admin_firestore.client()
@@ -92,10 +82,12 @@ async def create_user(user: dict):
         }
 
     except Exception as e:
+        print("caiu aqui")
         return {
             "success": False,
             "message": f"Erro ao criar usuário: {str(e)}"
         }
+    
 
 
 @app.delete("/users")
