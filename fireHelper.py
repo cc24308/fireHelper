@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Header, Path, HTTPException
+from fastapi import FastAPI, Header, Path, HTTPException, Depends
 import firebase_admin
 from firebase_admin import credentials, firestore as admin_firestore, auth 
 import os
@@ -54,25 +54,19 @@ async def get_users():
 
 #TODO: fazer com que essa função ja crie um documeneto na coleção "Tasks" com o id do usuario na hora de criar o usuario para melhor manipulação de dados
 @app.post("/users")
-async def create_user(user: dict):
-
+async def create_user(user: dict, user_id: str = Depends(require_user_id)): #depends faz com que a função seja chamada antes da função que está chamando ela, e o retorno dela é passado como parametro para a função que está chamando
     try:
         if not user:
-
             return {
                 "success": False,
                 "message": "User login data is required"
             }
 
-        # cria o usuário no firestore com o add
-        user_ref, uselles = admin_db.collection("users").add(user)
+        user_ref = admin_db.collection("users").add(user)
+        user_id_created = user_ref[1].id  # .add() retorna (ref, result)
 
-        # pega o ID do documento criado
-        user_id = user_ref.id
-
-        # cria o documento de tarefas para o usuário
         admin_db.collection("tasks").add({
-            "user_id": user_id,
+            "user_id": user_id_created,
             "tasks": []
         })
 
@@ -82,7 +76,6 @@ async def create_user(user: dict):
         }
 
     except Exception as e:
-        print("caiu aqui")
         return {
             "success": False,
             "message": f"Error trying to create user: {str(e)}"
@@ -200,3 +193,13 @@ def verify_token(id_token: str):
     except Exception as e:
 
         raise HTTPException(status_code=401, detail="Invalid token")
+
+def get_token_from_header(authorization: str = Header(...)):
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Invalid authorization header")
+
+    token = authorization.split(" ")[1]
+    return token
+
+def require_user_id(token: str = Depends(get_token_from_header)):
+    return verify_token(token)
