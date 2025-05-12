@@ -9,7 +9,6 @@ load_dotenv()
 
 #firebase_admin.initialize_app(cred)
 
-
 #pip freeze > requirements.txt = pra fazer o txt que o render vai baixar pra fazer a api rodar
 #base64 -w0 C:/Users/u24308/Documents/GitHub/fireHelper/mk39.json > credential.b64
 
@@ -46,6 +45,8 @@ def get_token_from_header(authorization: str = Header(...)):
 def require_user_id(token: str = Depends(get_token_from_header)):
     return verify_token(token)
 
+
+
 @app.get("/")
 async def root():
 
@@ -76,19 +77,25 @@ async def get_users():
 
 #TODO: fazer com que essa função ja crie um documeneto na coleção "Tasks" com o id do usuario na hora de criar o usuario para melhor manipulação de dados
 @app.post("/users")
-async def create_user(user: dict, user_id: str = Depends(require_user_id)): #depends faz com que a função seja chamada antes da função que está chamando ela, e o retorno dela é passado como parametro para a função que está chamando
+async def create_user(user_id: str = Depends(require_user_id)): #depends faz com que a função seja chamada antes da função que está chamando ela, 
+                                                                            #e o retorno dela é passado como parametro para a função que está chamando
+                                                                            #e é uma boa verificar o token assim pq nao precisa fazer o decode do token toda vez no Header
     try:
-        if not user:
+        if not user_id:
             return {
                 "success": False,
                 "message": "User login data is required"
             }
 
-        user_ref = admin_db.collection("users").add(user)
-        user_id_created = user_ref[1].id  # .add() retorna (ref, result)
+        user_ref = admin_db.collection("users").document(user_id)
+        user_ref.set({
+            "name": "",
+            "exp": 0,
+        })
 
-        admin_db.collection("tasks").add({
-            "user_id": user_id_created,
+        task_ref = admin_db.collection("tasks").document(user_id)
+        
+        task_ref.set({
             "tasks": []
         })
 
