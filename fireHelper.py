@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Header, Path, HTTPException, Depends
+from fastapi import FastAPI, Header, HTTPException, Depends, Path
 import firebase_admin
 from firebase_admin import credentials, firestore as admin_firestore, auth 
 import os
@@ -23,6 +23,28 @@ firebase_admin.initialize_app(cred)
 
 admin_db = admin_firestore.client()
 app = FastAPI()
+
+def verify_token(id_token: str):
+
+    try:
+        #verifica o token com firebase admin com a função oficial
+        decoded_token = auth.verify_id_token(id_token)
+        user_id = decoded_token['uid']  #o uid do usuário
+        return user_id
+
+    except Exception as e:
+
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+def get_token_from_header(authorization: str = Header(...)):
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Invalid authorization header")
+
+    token = authorization.split(" ")[1]
+    return token
+
+def require_user_id(token: str = Depends(get_token_from_header)):
+    return verify_token(token)
 
 @app.get("/")
 async def root():
@@ -180,26 +202,3 @@ async def create_task(task : Task ,id_token: str = Header(...)  ):
             "message": f"Failed to create task: {str(e)}"
         }
 
-
-
-def verify_token(id_token: str):
-
-    try:
-        #verifica o token com firebase admin com a função oficial
-        decoded_token = auth.verify_id_token(id_token)
-        user_id = decoded_token['uid']  #o uid do usuário
-        return user_id
-
-    except Exception as e:
-
-        raise HTTPException(status_code=401, detail="Invalid token")
-
-def get_token_from_header(authorization: str = Header(...)):
-    if not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Invalid authorization header")
-
-    token = authorization.split(" ")[1]
-    return token
-
-def require_user_id(token: str = Depends(get_token_from_header)):
-    return verify_token(token)
