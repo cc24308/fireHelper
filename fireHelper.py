@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 import os, json, base64
 load_dotenv() 
 
+#RESOLVE SOBRE O REARER E MUDAR A ESTRUTURA DO PROJETO PARA RECEBER O UID INVES DO TOKEN
+
 #firebase_admin.initialize_app(cred)
 
 #pip freeze > requirements.txt = pra fazer o txt que o render vai baixar pra fazer a api rodar
