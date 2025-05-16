@@ -198,7 +198,7 @@ async def create_task(task : Task, user_uid: str = Header(...)  ):
             "tasks": {
                 task.date: admin_firestore.firestore.ArrayUnion([task.model_dump()])   
             }
-        }, merge=True)
+        }, merge=True) #faz com que nao apague os outros registros naquela data
 
         return {
             "success": True,
