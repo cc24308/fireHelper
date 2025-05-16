@@ -79,24 +79,24 @@ async def get_users():
 
 #TODO: fazer com que essa função ja crie um documeneto na coleção "Tasks" com o id do usuario na hora de criar o usuario para melhor manipulação de dados
 @app.post("/users")
-async def create_user(user_info : User, user_id: str = Header(...) ): #depends faz com que a função seja chamada antes da função que está chamando ela, 
+async def create_user(user_info : User, user_uid: str = Header(...) ): #depends faz com que a função seja chamada antes da função que está chamando ela, 
                                                                             #e o retorno dela é passado como parametro para a função que está chamando
                                                                             #e é uma boa verificar o token assim pq nao precisa fazer o decode do token toda vez no Header
     try:
-        if not user_id:
+        if not user_uid:
             return {
                 "success": False,
                 "message": "User login data is required"
             }
 
-        user_ref = admin_db.collection("users").document(user_id)
+        user_ref = admin_db.collection("users").document(user_uid)
         user_ref.set({
             "name": user_info.name,
             "exp": 0,
             "level": 1,
         })
 
-        task_ref = admin_db.collection("tasks").document(user_id)
+        task_ref = admin_db.collection("tasks").document(user_uid)
         
         task_ref.set({
             "tasks": []
