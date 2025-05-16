@@ -25,7 +25,7 @@ firebase_admin.initialize_app(cred)
 admin_db = admin_firestore.client()
 app = FastAPI()
 
-def verify_token(id_token: str):
+"""def verify_token(id_token: str):
 
     try:
         #verifica o token com firebase admin com a função oficial
@@ -35,7 +35,7 @@ def verify_token(id_token: str):
 
     except Exception as e:
 
-        raise HTTPException(status_code=401, detail="Invalid token")
+        raise HTTPException(status_code=401, detail="Invalid token")"""
 
 def get_token_from_header(user_id: str = Header(...)):
     #if not authorization.startswith("Bearer"):
@@ -45,7 +45,7 @@ def get_token_from_header(user_id: str = Header(...)):
     return token
 
 def require_user_id(token: str = Depends(get_token_from_header)):
-    return verify_token(token)
+    return token
 
 
 
