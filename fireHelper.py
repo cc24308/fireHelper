@@ -79,7 +79,7 @@ async def get_users():
 
 #TODO: fazer com que essa função ja crie um documeneto na coleção "Tasks" com o id do usuario na hora de criar o usuario para melhor manipulação de dados
 @app.post("/users")
-async def create_user(user_id: str = Depends(Header(...))): #depends faz com que a função seja chamada antes da função que está chamando ela, 
+async def create_user(user_id: str = Header(...)): #depends faz com que a função seja chamada antes da função que está chamando ela, 
                                                                             #e o retorno dela é passado como parametro para a função que está chamando
                                                                             #e é uma boa verificar o token assim pq nao precisa fazer o decode do token toda vez no Header
     try:
