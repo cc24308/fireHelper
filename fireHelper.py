@@ -194,9 +194,11 @@ async def create_task(task : Task ,user_uid: str = Header(...)  ):
     try:
         
         task_ref = admin_db.collection("tasks").document(user_uid)
-        task_ref.update({
-            "tasks": admin_firestore.firestore.ArrayUnion([task.model_dump()])
-        })
+        task_ref.set({
+            "tasks": {
+                "11-11-1111": task.model_dump(), 
+            }
+        }, merge=True)
 
         return {
             "success": True,
