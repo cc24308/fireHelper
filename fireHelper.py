@@ -38,8 +38,8 @@ def verify_token(id_token: str):
         raise HTTPException(status_code=401, detail="Invalid token")
 
 def get_token_from_header(authorization: str = Header(...)):
-    if not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Invalid authorization header")
+    #if not authorization.startswith("Bearer"):
+    #    raise HTTPException(status_code=401, detail="Invalid authorization header")
 
     token = authorization.split(" ")[1]
     return token
