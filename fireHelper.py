@@ -37,11 +37,11 @@ def verify_token(id_token: str):
 
         raise HTTPException(status_code=401, detail="Invalid token")
 
-def get_token_from_header(authorization: str = Header(...)):
+def get_token_from_header(user_id: str = Header(...)):
     #if not authorization.startswith("Bearer"):
     #    raise HTTPException(status_code=401, detail="Invalid authorization header")
 
-    token = authorization.split(" ")[1]
+    token = user_id.split(" ")[1]
     return token
 
 def require_user_id(token: str = Depends(get_token_from_header)):
