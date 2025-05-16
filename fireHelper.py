@@ -148,11 +148,9 @@ async def delete_user(user: dict):
         }
 
 app.patch("/users/exp/{exp}")
-async def update_user_exp(exp: int = Path(...), id_token: str = Header(...) ):
+async def update_user_exp(exp: int = Path(...), user_uid: str = Header(...) ):
 
     try:
-
-        user_uid = verify_token(id_token)
 
         user_ref = admin_db.collection("users").document(user_uid)
         # collection(user) = buscar a coleção com o nome passado no parametro
@@ -191,14 +189,13 @@ async def update_user_exp(exp: int = Path(...), id_token: str = Header(...) ):
         }
 
 @app.post("/tasks")
-async def create_task(task : Task ,id_token: str = Header(...)  ):
+async def create_task(task : Task ,user_uid: str = Header(...)  ):
 
     try:
-        user_uid = verify_token(id_token)
-
+        
         task_ref = admin_db.collection("tasks").document(user_uid)
         task_ref.update({
-            "tasks": admin_firestore.firestore.ArrayUnion([task.dict()])
+            "tasks": admin_firestore.firestore.ArrayUnion([task.model_dump()])
         })
 
         return {
