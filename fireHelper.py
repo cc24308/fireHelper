@@ -189,14 +189,14 @@ async def update_user_exp(exp: int = Path(...), user_uid: str = Header(...) ):
         }
 
 @app.post("/tasks")
-async def create_task(task : Task ,user_uid: str = Header(...)  ):
+async def create_task(task : Task, user_uid: str = Header(...)  ):
 
     try:
         
         task_ref = admin_db.collection("tasks").document(user_uid)
         task_ref.set({
             "tasks": {
-                "11-11-1111": task.model_dump(), 
+                task.date: admin_firestore.firestore.ArrayUnion([task.model_dump()])   
             }
         }, merge=True)
 
