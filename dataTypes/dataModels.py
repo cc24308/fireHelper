@@ -6,3 +6,8 @@ class Task(BaseModel):
     type : str
     timed : str
     xp : int
+
+
+class User(BaseModel):
+    name : str
+    exp : int

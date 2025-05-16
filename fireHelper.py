@@ -2,7 +2,7 @@ from fastapi import FastAPI, Header, HTTPException, Depends, Path
 import firebase_admin
 from firebase_admin import credentials, firestore as admin_firestore, auth 
 import os
-from dataTypes.Task import Task
+from dataTypes.dataModels import Task, User
 from dotenv import load_dotenv
 import os, json, base64
 load_dotenv() 
@@ -79,7 +79,7 @@ async def get_users():
 
 #TODO: fazer com que essa função ja crie um documeneto na coleção "Tasks" com o id do usuario na hora de criar o usuario para melhor manipulação de dados
 @app.post("/users")
-async def create_user(user_id: str = Header(...), ): #depends faz com que a função seja chamada antes da função que está chamando ela, 
+async def create_user(user_info : User, user_id: str = Header(...) ): #depends faz com que a função seja chamada antes da função que está chamando ela, 
                                                                             #e o retorno dela é passado como parametro para a função que está chamando
                                                                             #e é uma boa verificar o token assim pq nao precisa fazer o decode do token toda vez no Header
     try:
@@ -91,8 +91,9 @@ async def create_user(user_id: str = Header(...), ): #depends faz com que a fun�
 
         user_ref = admin_db.collection("users").document(user_id)
         user_ref.set({
-            "name": "",
+            "name": user_info.name,
             "exp": 0,
+            "level": 1,
         })
 
         task_ref = admin_db.collection("tasks").document(user_id)
