@@ -14,7 +14,7 @@ load_dotenv()
 #pip freeze > requirements.txt = pra fazer o txt que o render vai baixar pra fazer a api rodar
 #base64 -w0 C:/Users/u24308/Documents/GitHub/fireHelper/mk39.json > credential.b64
 
-b64 = os.environ.get(["CREDENTIAL_CERTIFICATE_B64"])
+b64 = os.environ.get("CREDENTIAL_CERTIFICATE_B64")
 b64 += "=" * ((4 - len(b64) % 4) % 4)
 json_str = base64.b64decode(b64).decode("utf-8")
 cred_dict = json.loads(json_str)
