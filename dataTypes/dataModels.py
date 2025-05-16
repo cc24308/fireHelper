@@ -10,4 +10,3 @@ class Task(BaseModel):
 
 class User(BaseModel):
     name : str
-    exp : int
